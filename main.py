@@ -15,6 +15,89 @@ def calculate_angles(a, b, c):
     return angle
 
 
+class bodyRotation():
+    def __init__(self, landmarks: list):
+        try:
+            self.LEFT_SHOULDER_ROTATION = calculate_angles([landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].x,
+                                                            landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].y], [landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].x,
+                                                                                                                landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].y], [landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].x,
+                                                                                                                                                                         landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].y]
+                                                           )
+        except:
+            self.LEFT_SHOULDER_ROTATION = 90
+        try:
+            self.LEFT_ANKLE_ROTATION = calculate_angles([landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].x,
+                                                         landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].y], [landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value].x,
+                                                                                                              landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value].y], [landmarks[mp_pose.PoseLandmark.LEFT_FOOT_INDEX.value].x,
+                                                                                                                                                                    landmarks[mp_pose.PoseLandmark.LEFT_FOOT_INDEX.value].y])
+        except:
+            self.LEFT_ANKLE_ROTATION = 90
+        try:
+            self.LEFT_ELBOW_ROTATION = calculate_angles([landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].x,
+                                                        landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER].y], [landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].x,
+                                                                                                           landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].y], [landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].x,
+                                                                                                                                                                 landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].y])
+        except:
+            self.LEFT_ELBOW_ROTATION = 90
+
+        try:
+            self.RIGHT_ANKLE_ROTATION = calculate_angles([landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].x,
+                                                         landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].y], [landmarks[mp_pose.PoseLandmark.RIGHT_ANKLE.value].x,
+                                                                                                               landmarks[mp_pose.PoseLandmark.RIGHT_ANKLE.value].y], [landmarks[mp_pose.PoseLandmark.RIGHT_FOOT_INDEX.value].x,
+                                                                                                                                                                      landmarks[mp_pose.PoseLandmark.RIGHT_FOOT_INDEX.value].y])
+        except:
+            self.RIGHT_ANKLE_ROTATION = 90
+        try:
+            self.RIGHT_SHOULDER_ROTATION = calculate_angles([landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].x,
+                                                            landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].y], [landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].x,
+                                                                                                                 landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].y], [landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value].x,
+                                                                                                                                                                           landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value].y]
+                                                            )
+        except:
+            self.RIGHT_SHOULDER_ROTATION = 90
+        try:
+            self.RIGHT_ELBOW_ROTATION = calculate_angles([landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].x,
+                                                          landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER].y], [landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value].x,
+                                                                                                              landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value].y], [landmarks[mp_pose.PoseLandmark.RIGHT_WRIST.value].x,
+                                                                                                                                                                     landmarks[mp_pose.PoseLandmark.RIGHT_WRIST.value].y])
+        except:
+            self.RIGHT_ELBOW_ROTATION = 90
+
+    def all(self):
+        self.left()
+        self.right()
+
+    def left(self):
+        self.left_shoulder_r()
+        self.left_elbow_r()
+        self.left_ankle_r()
+
+    def right(self):
+        self.right_shoulder_r()
+        self.right_elbow_r()
+        self.right_ankle_r()
+
+    def left_shoulder_r(self):
+        print(
+            f"LEFT_SHOULDER_ROTATION | {self.LEFT_SHOULDER_ROTATION}")
+
+    def left_ankle_r(self):
+        print(f"LEFT_ANKLE_ROTATION | {self.LEFT_ANKLE_ROTATION}")
+
+    def left_elbow_r(self):
+        print(f"LEFT_ELBOW_ROTATION | {self.LEFT_ELBOW_ROTATION}")
+
+    def right_shoulder_r(self):
+        print(
+            f"RIGHT_SHOULDER_ROTATION | {self.RIGHT_SHOULDER_ROTATION}")
+
+    def right_ankle_r(self):
+        print(f"RIGHT_ANKLE_ROTATION | {self.RIGHT_ANKLE_ROTATION}")
+
+    def right_elbow_r(self):
+        print(f"RIGHT_ELBOW_ROTATION | {self.RIGHT_ELBOW_ROTATION}")
+
+
 mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
 
@@ -33,59 +116,12 @@ with mp_pose.Pose(min_detection_confidence=0.75, min_tracking_confidence=0.75) a
 
         image.flags.writeable = True
         image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-
-        lefts = []
-        rights = []
         try:
             landmarks = results.pose_landmarks.landmark
-            left_hip = [landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].x,
-                        landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].y]
-            left_shoulder = [landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].x,
-                             landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].y]
-            left_elbow = [landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].x,
-                          landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].y]
-            left_wrist = [landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].x,
-                          landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].y]
-            left_knee = [landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].x,
-                         landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].y]
-            #left_heel = [landmarks[mp_pose.PoseLandmark.LEFT_HEEL.value].x,landmarks[mp_pose.PoseLandmark.LEFT_HEEL.value].y]
-            #left_foot_index = [landmarks[mp_pose.PoseLandmark.LEFT_FOOT_INDEX.value].x,landmarks[mp_pose.PoseLandmark.LEFT_FOOT_INDEX.value].y]
-            #left_ankle = [landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value].x, landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value].y]
-            left_elbow_rotation = calculate_angles(
-                left_shoulder, left_elbow, left_wrist)
-            left_shoulder_rotation = calculate_angles(
-                left_hip, left_shoulder, left_elbow)
-            #left_ankle_rotation = calculate_angles(left_knee, left_ankle, left_foot_index)
-            lefts.append(left_shoulder_rotation)
-            lefts.append(left_elbow_rotation)
-            #lefts.append(left_ankle_rotation)
+            body = bodyRotation(landmarks)
 
-            right_shoulder = [landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].x,
-                              landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].y]
-            right_elbow = [landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value].x,
-                           landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value].y]
-            right_wrist = [landmarks[mp_pose.PoseLandmark.RIGHT_WRIST.value].x,
-                           landmarks[mp_pose.PoseLandmark.RIGHT_WRIST.value].y]
-            right_hip = [landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].x,
-                         landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].y]
-            right_knee = [landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].x,
-                          landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].y]
-            #right_heel = [landmarks[mp_pose.PoseLandmark.RIGHT_HEEL.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_HEEL.value].y]
-            #right_foot_index = [landmarks[mp_pose.PoseLandmark.RIGHT_FOOT_INDEX.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_FOOT_INDEX.value].y]
-            #right_ankle = [landmarks[mp_pose.PoseLandmark.RIGHT_ANKLE.value].x, landmarks[mp_pose.PoseLandmark.RIGHT_ANKLE.value].y]
-            right_elbow_rotation = calculate_angles(
-                right_shoulder, right_elbow, right_wrist)
-            right_shoulder_rotation = calculate_angles(
-                right_hip, right_shoulder, right_elbow)
-            #right_ankle_rotation = calculate_angles(right_knee, right_ankle, right_foot_index)
-            rights.append(right_shoulder_rotation)
-            rights.append(right_elbow_rotation)
-            #rights.append(right_ankle_rotation)
+            body.all()
 
-            print(
-                f"LEFTS: [\nLeft Shoulder Rotation: {lefts[0]}\nLeft Elbow Rotation{lefts[1]}\n]")
-            print(
-                f"RIGHTS: [\nRight Shoulder Rotation: {rights[0]}\nRight Elbow Rotation{rights[1]}\n]")
         except:
             pass
 
